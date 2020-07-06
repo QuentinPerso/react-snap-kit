@@ -1,0 +1,62 @@
+{
+  "_from": "react-native-snapchat-login",
+  "_id": "react-native-snapchat-login@1.1.1",
+  "_inBundle": false,
+  "_integrity": "sha512-+qrTWrie4DxRV1eej9gF7bdp2AotPpoWIt/v2DekCyBFFfKtqdkrG/twBGmrXZBkS6ak4Wrf+UmhwH1O2OP51A==",
+  "_location": "/react-native-snapchat-login",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-snapchat-login",
+    "name": "react-native-snapchat-login",
+    "escapedName": "react-native-snapchat-login",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-snapchat-login/-/react-native-snapchat-login-1.1.1.tgz",
+  "_shasum": "a536fa4cf26918b299db7518f334c8ed59652fc0",
+  "_spec": "react-native-snapchat-login",
+  "_where": "/Users/quentin/Workspaces/AwesomeProject",
+  "author": {
+    "name": "Maximliano Duthey",
+    "email": "max@xoor.io"
+  },
+  "bugs": {
+    "url": "https://github.com/mduthey/react-native-snapchat-login/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "react-native-snapchat-login",
+  "devDependencies": {
+    "react": "^16.5.0",
+    "react-native": "^0.59.4"
+  },
+  "homepage": "https://github.com/mduthey/react-native-snapchat-login#readme",
+  "keywords": [
+    "react-native"
+  ],
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "main": "index",
+  "name": "react-native-snapchat-login",
+  "peerDependencies": {
+    "react": "^16.5.0",
+    "react-native": ">=0.57.0-rc.0 <1.0.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mduthey/react-native-snapchat-login.git",
+    "baseUrl": "https://github.com/mduthey/react-native-snapchat-login"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "title": "React Native Snapchat Login",
+  "version": "1.1.1"
+}
