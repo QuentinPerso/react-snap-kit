@@ -1,12 +1,12 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 
-export const RNSnapchatLogin = NativeModules.SnapchatLogin;
-export const RNSnapchatLoginEmitter = new NativeEventEmitter(RNSnapchatLogin);
+export const RNSnapchatKit = NativeModules.SnapchatKit;
+export const RNSnapchatKitEmitter = new NativeEventEmitter(RNSnapchatKit);
 
-export default class SnapchatLogin {
+export default class SnapchatKit {
   static login() {
     return new Promise((resolve, reject) => {
-      RNSnapchatLogin.login()
+      RNSnapchatKit.login()
         .then((result) => {
           if(result.error) {
             reject(result.error);
@@ -21,24 +21,24 @@ export default class SnapchatLogin {
   }
 
   static async isLogged() {
-    const { result } = await RNSnapchatLogin.isUserLoggedIn();
+    const { result } = await RNSnapchatKit.isUserLoggedIn();
     return result;
   }
 
   static async logout() {
-    const { result } = await RNSnapchatLogin.logout();
+    const { result } = await RNSnapchatKit.logout();
     return result;
   }
 
   static getUserInfo() {
     return new Promise((resolve, reject) => {
-      RNSnapchatLogin.fetchUserData()
+      RNSnapchatKit.fetchUserData()
         .then(async (tmp) => {
           const data = tmp;
           if (data === null) {
             resolve(null);
           } else {
-            const res = await RNSnapchatLogin.getAccessToken();
+            const res = await RNSnapchatKit.getAccessToken();
             data.accessToken = res.accessToken;
             resolve(data);
           }
@@ -48,7 +48,7 @@ export default class SnapchatLogin {
   }
 
   static async sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
-    const { result } = await RNSnapchatLogin.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+    const { result } = await RNSnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
     return result;
   }
 

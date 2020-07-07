@@ -1,8 +1,8 @@
-#import "SnapchatLogin.h"
+#import "SnapchatKit.h"
 #import <SCSDKLoginKit/SCSDKLoginKit.h>
 #import <SCSDKCreativeKit/SCSDKCreativeKit.h>
 
-@implementation SnapchatLogin {
+@implementation SnapchatKit {
     SCSDKSnapAPI *snapAPI;
 }
 

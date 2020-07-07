@@ -1,5 +1,5 @@
 #import <React/RCTBridgeModule.h>
 
-@interface SnapchatLogin : NSObject <RCTBridgeModule>
+@interface SnapchatKit : NSObject <RCTBridgeModule>
 
 @end
