@@ -6,8 +6,11 @@
     SCSDKSnapAPI *snapAPI;
 }
 
-- (instancetype)init
-{
+- (dispatch_queue_t)methodQueue {
+  return dispatch_get_main_queue();
+}
+
+- (instancetype)init {
     self = [super init];
     if (self) {
         snapAPI = [SCSDKSnapAPI new];
@@ -15,10 +18,7 @@
     return self;
 }
 
-- (dispatch_queue_t)methodQueue
-{
-  return dispatch_get_main_queue();
-}
+
 
 RCT_EXPORT_MODULE()
 
@@ -135,7 +135,7 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl stickerUrl:(NSString *)st
         SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:url];
         snap = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
     }
-    if (photoUrl) {
+    else if (photoUrl) {
         NSURL *url = [NSURL URLWithString:photoUrl];
         SCSDKSnapPhoto *photo = [[SCSDKSnapPhoto alloc] initWithImageUrl:url];
         snap = [[SCSDKPhotoSnapContent alloc] initWithSnapPhoto:photo];
@@ -154,7 +154,7 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl stickerUrl:(NSString *)st
     
     snap.caption = caption;
     snap.attachmentUrl = attachmentUrl;
-    
+    NSLog(@"snap api : %@", snapAPI);
     [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
         if (error != nil) {
             reject(@"Error", @"Unknown", error);

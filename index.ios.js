@@ -46,4 +46,10 @@ export default class SnapchatLogin {
         .catch(e => { reject(e) });
     });
   }
+
+  static async sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+    const { result } = await RNSnapchatLogin.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+    return result;
+  }
+
 }
