@@ -1,30 +1,59 @@
 # React-Native SnapchatKit
 
-## **NOTE**
-There is a change in the package name from version 1.0.3 to 1.1.0.
-If you will upgrade, first do unlink or change the package manually in your MainApplication.java
-```diff
-- import com.reactlibrary.SnapchatLoginPackage;
-+ import com.mduthey.snapchat.SnapchatLoginPackage;
+- [1. Change Log](#changelog)
+- [2. Installation](#installation)
+- [3. Project configuration](#projectConfiguration)
+- [4. SDK integration](#integration)
+- [5. Requesting location authorization](#location)
+- [6. Consent management](#cmp)
+
+If you have any problem regarding SDK integration or need more informations email us at [support@singlespot.com](mailto:support@singlespot.com).
+
+<a id="changelog"></a>
+## 1. Change Log
+
+* **v1.0.0** :
+    - Brand new React Native Snaps  
+
+<a id="installation"></a>
+## 2. SDK Instalation
+
+From your project folder: 
+
+#### yarn
+
+```bash
+$ yarn add git+https://github.com/QuentinbTahi/react-snap-kit.git -- save
 ```
-Thanks [@velhari]( https://github.com/velhari )
 
-## Getting started
+#### npm
 
-`$ npm install react-native-snapchat-login --save`
+```bash
+$ npm install git+https://github.com/QuentinbTahi/react-snap-kit.git -- save
+```
 
-### Mostly automatic installation
+## 3. Project configuration
 
-**On iOS use CocoaPods**
+### 3.2 iOS configuration
 
-`$ react-native link react-native-snapchat-login`
+#### 3.2.1 Change min iOS version : 
 
-## Manual steps
+Edit your `Podfile` min version to 10 : `platform :ios, '10.0'`
 
-#### iOS
+#### 3.2.2 Run `$ pod install` from iOS folder : 
+
+```bash
+$ cd ios && pod install
+```
+or
+```bash
+$ react-native link react-native-snapchat-kit`
+```
+#### 3.2.3 Edit info.plist file : 
+
 Add to `Info.plist`
 
-```
+```xml
 <key>SCSDKClientId</key>
 <string>YOUR CLIENT ID</string>
 
@@ -47,7 +76,8 @@ Add to `Info.plist`
 
 **REMEMBER** Add the app url to your URL Types on Xcode config.
 
-Update the `AppDelegate.m`
+
+#### 3.2.4 Update the `AppDelegate.m` (Login only) :
 
 ```objc
 #import <SCSDKLoginKit/SCSDKLoginKit.h>
@@ -63,20 +93,22 @@ Update the `AppDelegate.m`
 }
 ```
 
-#### Android
-Update `android/build.gradle` with the min SDK Version
-```
+### 3.3 Android configuration
+
+#### 3.3.1 Update build.gradle :
+
+Update `android/build.gradle` with the min SDK Version :
+```json
 minSdkVersion = 19
 ```
-and add 
-```
+and add to your repositories list :
+```json
 maven {
     url "https://storage.googleapis.com/snap-kit-build/maven"
 }
 ```
-to your repositories list.
 
-Update `AndroidManifest.xml`
+#### 3.3.2 Update `AndroidManifest.xml` :
 
 Add the INTERNET permission
 ```
@@ -110,7 +142,7 @@ Add this to your application
 </activity>
 ```
 
-Create a new file `values/arrays.xml`
+#### 3.3.3 Create a new file `values/arrays.xml` :
 ```
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -121,10 +153,23 @@ Create a new file `values/arrays.xml`
 </resources>
 ```
 
-## Usage
-```javascript
-import SnapchatLogin from 'react-native-snapchat-login';
+## 4. Usage
 
-// TODO: What to do with the module?
-SnapchatLogin;
+## 4.1 Login
+
+```javascript
+import SnapchatKit from 'react-native-snapchat-kit';
+
+SnapchatKit.login() 
+SnapchatKit.isLogged()
+SnapchatKit.logout()
+SnapchatKit.getUserInfo()
+```
+
+## 4.1 Creative
+
+```javascript
+import SnapchatKit from 'react-native-snapchat-kit';
+
+SnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption)
 ```
