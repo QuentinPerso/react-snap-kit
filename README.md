@@ -108,12 +108,12 @@ maven {
 #### 3.3.2 Update `AndroidManifest.xml` :
 
 Add the INTERNET permission
-```
+```xml
 <uses-permission android:name="android.permission.INTERNET" />
 ```
 
 Add this to your application
-```
+```xml
 <meta-data android:name="com.snapchat.kit.sdk.clientId" android:value="YOUR CLIENT ID" />
 <meta-data android:name="com.snapchat.kit.sdk.redirectUrl" android:value="YOUR REDIRECT URL" />
 <meta-data android:name="com.snapchat.kit.sdk.scopes" android:resource="@array/snap_connect_scopes" />
@@ -140,7 +140,7 @@ Add this to your application
 ```
 
 #### 3.3.3 Create a new file `values/arrays.xml` :
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="snap_connect_scopes">
