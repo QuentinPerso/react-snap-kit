@@ -3,11 +3,7 @@
 - [1. Change Log](#changelog)
 - [2. Installation](#installation)
 - [3. Project configuration](#projectConfiguration)
-- [4. SDK integration](#integration)
-- [5. Requesting location authorization](#location)
-- [6. Consent management](#cmp)
-
-If you have any problem regarding SDK integration or need more informations email us at [support@singlespot.com](mailto:support@singlespot.com).
+- [4. Usage](#usage)
 
 <a id="changelog"></a>
 ## 1. Change Log
@@ -32,6 +28,7 @@ $ yarn add git+https://github.com/QuentinbTahi/react-snap-kit.git -- save
 $ npm install git+https://github.com/QuentinbTahi/react-snap-kit.git -- save
 ```
 
+<a id="projectConfiguration"></a>
 ## 3. Project configuration
 
 ### 3.2 iOS configuration
@@ -153,9 +150,10 @@ Add this to your application
 </resources>
 ```
 
+<a id="usage"></a>
 ## 4. Usage
 
-## 4.1 Login
+### 4.1 Login
 
 ```javascript
 import SnapchatKit from 'react-native-snapchat-kit';
@@ -166,7 +164,7 @@ SnapchatKit.logout()
 SnapchatKit.getUserInfo()
 ```
 
-## 4.1 Creative
+### 4.1 Creative
 
 ```javascript
 import SnapchatKit from 'react-native-snapchat-kit';
