@@ -52,4 +52,9 @@ export default class SnapchatKit {
     return result;
   }
 
+  static async shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+    const { result } = await RNSnapchatKit.shareVideoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+    return result;
+  }
+
 }
