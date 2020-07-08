@@ -154,13 +154,13 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl stickerUrl:(NSString *)st
     
     snap.caption = caption;
     snap.attachmentUrl = attachmentUrl;
-    NSLog(@"snap api : %@", snapAPI);
+
     [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
         if (error != nil) {
             reject(@"Error", @"Unknown", error);
         }
         else {
-            resolve([NSNull null]);
+            resolve(@{@"success": @(YES)});
         }
         /* Handle response */
     }];

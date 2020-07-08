@@ -1,12 +1,12 @@
 import { NativeModules, NativeEventEmitter } from 'react-native';
 import { resolve } from 'uri-js';
 
-export const RNSnapchatLogin = NativeModules.SnapchatLogin;
-export const RNSnapchatLoginEmitter = new NativeEventEmitter(RNSnapchatLogin);
+export const RNSnapchatKit = NativeModules.SnapchatLogin;
+export const RNSnapchatKitEmitter = new NativeEventEmitter(RNSnapchatKit);
 
 export default class SnapchatLogin {
   static addListener(eventType, listener, context) {
-    return RNSnapchatLoginEmitter.addListener(eventType, listener, context);
+    return RNSnapchatKitEmitter.addListener(eventType, listener, context);
   }
 
   static login() {
@@ -21,25 +21,25 @@ export default class SnapchatLogin {
         failedListener.remove();
         resolve(false);
       });
-      RNSnapchatLogin.login();
+      RNSnapchatKit.login();
     });
   }
 
   static async isLogged() {
-    const result = await RNSnapchatLogin.isUserLoggedIn();
+    const result = await RNSnapchatKit.isUserLoggedIn();
     const resultJSON = JSON.parse(result);
     return !!resultJSON.result;
   }
 
   static async logout() {
-    const result = await RNSnapchatLogin.logout();
+    const result = await RNSnapchatKit.logout();
     const resultJSON = JSON.parse(result);
     return !!resultJSON.result;
   }
 
   static getUserInfo() {
     return new Promise((resolve, reject) => {
-      RNSnapchatLogin.fetchUserData()
+      RNSnapchatKit.fetchUserData()
         .then((tmp) => {
           const data = JSON.parse(tmp);
           if (data === null) {
