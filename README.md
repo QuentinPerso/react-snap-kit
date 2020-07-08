@@ -169,5 +169,6 @@ SnapchatKit.getUserInfo()
 ```javascript
 import SnapchatKit from 'react-native-snapchat-kit';
 
-SnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption)
+SnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+SnapchatKit.shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption)
 ```
