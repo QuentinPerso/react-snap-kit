@@ -47,13 +47,35 @@ export default class SnapchatKit {
     });
   }
 
-  static async sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
-    const { result } = await RNSnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+  static async sharePhoto(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+	const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+
+	const resolvedPhoto = resolveAssetSource(photoImageSourceOrUrl);
+	const resolvedSticker = resolveAssetSource(stickerImageSourceOrUrl);
+
+	const { result } = await RNSnapchatKit.sharePhotoResolved(
+		resolvedPhoto, resolvedPhoto == null ? photoImageSourceOrUrl : null, 
+		resolvedSticker, resolvedSticker == null ? resolvedSticker : null, 
+		stickerPosX, stickerPosY, 
+		attachmentUrl, 
+		caption).catch(e => { reject(e) });
+
     return result;
   }
 
+
   static async shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
-    const { result } = await RNSnapchatKit.shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+    const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+
+	const resolvedSticker = resolveAssetSource(stickerImageSourceOrUrl);
+
+	const { result } = await RNSnapchatKit.shareVideoAtUrl(
+		videoUrl, 
+		resolvedSticker, resolvedSticker == null ? resolvedSticker : null, 
+		stickerPosX, stickerPosY, 
+		attachmentUrl, 
+		caption).catch(e => { reject(e) });
+
     return result;
   }
 

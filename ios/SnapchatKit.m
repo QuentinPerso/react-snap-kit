@@ -1,6 +1,7 @@
 #import "SnapchatKit.h"
 #import <SCSDKLoginKit/SCSDKLoginKit.h>
 #import <SCSDKCreativeKit/SCSDKCreativeKit.h>
+#import <React/RCTConvert.h>
 
 @implementation SnapchatKit {
     SCSDKSnapAPI *snapAPI;
@@ -114,19 +115,33 @@ RCT_REMAP_METHOD(getAccessToken,
 #pragma mark --------- Creative Kit ------------
 //******************************************************************
 
-RCT_EXPORT_METHOD(sharePhotoAtUrl:(NSString *)photoUrl stickerUrl:(NSString *)stickerUrl stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY attachmentUrl:(NSString *)attachmentUrl caption:(NSString *)caption resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(sharePhotoResolved:(NSDictionary *)resolvedPhoto url:(NSString *)photoUrl
+                  stickerResolved:(NSDictionary *)stickerResolved stickerUrl:(NSString *)stickerUrl
+                  stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY
+                  attachmentUrl:(NSString *)attachmentUrl
+                  caption:(NSString *)caption
+                  resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     
-    [self shareWithPhotoUrl:photoUrl videoUrl:NULL stickerUrl:stickerUrl stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
+    NSObject *photo = resolvedPhoto != NULL ? resolvedPhoto : photoUrl;
+    NSObject *sticker = stickerResolved != NULL ? stickerResolved : stickerUrl;
+    [self shareWithPhoto:photo videoUrl:NULL sticker:sticker stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
     
 }
 
-RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl stickerUrl:(NSString *)stickerUrl stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY attachmentUrl:(NSString *)attachmentUrl caption:(NSString *)caption resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+
+RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl
+                  stickerResolved:(NSDictionary *)stickerResolved stickerUrl:(NSString *)stickerUrl
+                  stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY
+                  attachmentUrl:(NSString *)attachmentUrl
+                  caption:(NSString *)caption
+                  resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
     
-    [self shareWithPhotoUrl:NULL videoUrl:videoUrl stickerUrl:stickerUrl stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
+    NSObject *sticker = stickerResolved != NULL ? stickerResolved : stickerUrl;
+    [self shareWithPhoto:NULL videoUrl:videoUrl sticker:sticker stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
     
 }
 
-- (void) shareWithPhotoUrl:(NSString *)photoUrl videoUrl:(NSString *)videoUrl stickerUrl:(NSString *)stickerUrl stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY attachmentUrl:(NSString *)attachmentUrl caption:(NSString *)caption resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
+- (void) shareWithPhoto:(NSObject *)photoImageOrUrl videoUrl:(NSString *)videoUrl sticker:(NSObject *)stickerImageOrUrl stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY attachmentUrl:(NSString *)attachmentUrl caption:(NSString *)caption resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
     
     NSObject<SCSDKSnapContent> *snap;
     
@@ -135,32 +150,52 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl stickerUrl:(NSString *)st
         SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:url];
         snap = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
     }
-    else if (photoUrl) {
-        NSURL *url = [NSURL URLWithString:photoUrl];
+    else if ([photoImageOrUrl isKindOfClass:[NSString class]]) {
+        NSURL *url = [NSURL URLWithString:(NSString *)photoImageOrUrl];
         SCSDKSnapPhoto *photo = [[SCSDKSnapPhoto alloc] initWithImageUrl:url];
+        snap = [[SCSDKPhotoSnapContent alloc] initWithSnapPhoto:photo];
+    }
+    else if ([photoImageOrUrl isKindOfClass:[NSDictionary class]]) {
+        UIImage *image = [RCTConvert UIImage:photoImageOrUrl];
+        SCSDKSnapPhoto *photo = [[SCSDKSnapPhoto alloc] initWithImage:image];
         snap = [[SCSDKPhotoSnapContent alloc] initWithSnapPhoto:photo];
     }
     else {
         snap = [SCSDKNoSnapContent new];
     }
 
-    if (stickerUrl) {
-        NSURL *url = [NSURL URLWithString:stickerUrl];
-        SCSDKSnapSticker *sticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:url isAnimated:NO];
-        sticker.posX = stickerPosX;
-        sticker.posY = stickerPosY;
-        snap.sticker = sticker;
+    if (stickerImageOrUrl) {
+        SCSDKSnapSticker *snapSticker;
+        if ([stickerImageOrUrl isKindOfClass:[NSString class]]) {
+            NSURL *url = [NSURL URLWithString:(NSString *)stickerImageOrUrl];
+            snapSticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:url isAnimated:NO];
+        }
+        else if ([stickerImageOrUrl isKindOfClass:[UIImage class]]) {
+            snapSticker = [[SCSDKSnapSticker alloc] initWithStickerImage:(UIImage *)stickerImageOrUrl];
+        }
+        
+        if (stickerPosX) {
+            snapSticker.posX = stickerPosX;
+        }
+        if (stickerPosY) {
+             snapSticker.posY = stickerPosY;
+        }
+       
+        snap.sticker = snapSticker;
     }
     
     snap.caption = caption;
     snap.attachmentUrl = attachmentUrl;
-
+    NSLog(@"snap api : %@", snapAPI);
     [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
         if (error != nil) {
-            reject(@"Error", @"Unknown", error);
+            resolve(@{
+            @"result": @(YES),
+            @"error": error.localizedDescription
+                });
         }
         else {
-            resolve(@{@"success": @(YES)});
+            resolve(@{ @"result": @(YES)});
         }
         /* Handle response */
     }];
