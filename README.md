@@ -99,7 +99,7 @@ Update `android/build.gradle` with the min SDK Version :
 minSdkVersion = 19
 ```
 and add to your repositories list :
-```json
+```
 maven {
     url "https://storage.googleapis.com/snap-kit-build/maven"
 }
@@ -150,6 +150,25 @@ Add this to your application
 </resources>
 ```
 
+#### 3.3.4 Set up your FileProvider to share media files to Snapchat (creative kit only):
+
+To share any media or sticker content to Snapchat, follow the protocol specified by [FileProvider API](https://developer.android.com/reference/android/support/v4/content/FileProvider). Once you have set this up, your AndroidManifest.xml will contain the following under `<application>`:
+    
+```xml
+<provider
+    android:authorities="${applicationId}.fileprovider"
+    android:name="android.support.v4.content.FileProvider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths"
+        />
+</provider>
+```
+        
+**Note**: The authority used by the SDK is explicitly `<your-package-name>.fileprovider`. Please ensure you follow this convention when setting the value. If you have different package names for debug and production builds, the `${applicationId}` should resolve to it appropriately.
+
 <a id="usage"></a>
 ## 4. Usage
 
@@ -172,3 +191,19 @@ import SnapchatKit from 'react-native-snapchat-kit';
 SnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
 SnapchatKit.shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption)
 ```
+
+#### 4.1.1 Notes on creative kit :
+
+- Media Size and Length Restrictions
+  * Shared media must be 100 MB or smaller.
+  * Videos must be 60 seconds or shorter.
+
+- Suggested Media Parameters:
+  * Aspect ratio - 9:16
+  * Preferred file types:
+  * Image - .jpg or .png
+  * Video - .mp4
+  * Dimensions - 1080px x 1920px
+  * Video Bitrate - 1080p at 8mbps or 720p at 5mbps
+
+
