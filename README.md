@@ -188,8 +188,8 @@ SnapchatKit.getUserInfo()
 ```javascript
 import SnapchatKit from 'react-native-snapchat-kit';
 
-SnapchatKit.sharePhotoAtUrl(photoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
-SnapchatKit.shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption)
+SnapchatKit.sharePhoto(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
+SnapchatKit.shareVideoAtUrl(videoUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption);
 ```
 
 #### 4.1.1 Notes on creative kit :
