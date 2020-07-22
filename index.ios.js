@@ -64,7 +64,7 @@ export default class SnapchatKit {
   }
 
 
-  static async shareVideoAtUrl(videoUrl, stickerUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+  static async shareVideoAtUrl(videoUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
     const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 	const resolvedSticker = resolveAssetSource(stickerImageSourceOrUrl);
