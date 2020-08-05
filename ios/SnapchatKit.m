@@ -32,7 +32,7 @@ RCT_REMAP_METHOD(login,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-    
+
     [SCSDKLoginClient loginFromViewController:rootViewController
                                    completion:^(BOOL success, NSError * _Nullable error)
     {
@@ -55,7 +55,7 @@ RCT_REMAP_METHOD(isUserLoggedIn,
                  isUserLoggedInResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
-    
+
     resolve(@{@"result": @([SCSDKLoginClient isUserLoggedIn])});
 }
 
@@ -65,9 +65,9 @@ RCT_REMAP_METHOD(fetchUserData,
 {
     if ([SCSDKLoginClient isUserLoggedIn]) {
         NSString *graphQLQuery = @"{me{displayName, externalId, bitmoji{avatar}}}";
-        
+
         NSDictionary *variables = @{@"page": @"bitmoji"};
-        
+
         [SCSDKLoginClient fetchUserDataWithQuery:graphQLQuery
                                        variables:variables
                                          success:^(NSDictionary *resources)
@@ -82,7 +82,7 @@ RCT_REMAP_METHOD(fetchUserData,
                 @"externalId": me[@"externalId"],
                 @"avatar": bitmojiAvatarUrl
             });
-            
+
         }
                                          failure:^(NSError * error, BOOL isUserLoggedOut)
         {
@@ -98,7 +98,7 @@ RCT_REMAP_METHOD(getAccessToken,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSString * accessToken = [SCSDKLoginClient getAccessToken];
-    
+
     if (accessToken) {
         resolve(@{
             @"accessToken": accessToken
@@ -121,11 +121,11 @@ RCT_EXPORT_METHOD(sharePhotoResolved:(NSDictionary *)resolvedPhoto url:(NSString
                   attachmentUrl:(NSString *)attachmentUrl
                   caption:(NSString *)caption
                   resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     NSObject *photo = resolvedPhoto != NULL ? resolvedPhoto : photoUrl;
     NSObject *sticker = stickerResolved != NULL ? stickerResolved : stickerUrl;
     [self shareWithPhoto:photo videoUrl:NULL sticker:sticker stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
-    
+
 }
 
 
@@ -135,23 +135,23 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl
                   attachmentUrl:(NSString *)attachmentUrl
                   caption:(NSString *)caption
                   resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
-    
+
     NSObject *sticker = stickerResolved != NULL ? stickerResolved : stickerUrl;
     [self shareWithPhoto:NULL videoUrl:videoUrl sticker:sticker stickerPosX:stickerPosX stickerPosY:stickerPosY attachmentUrl:attachmentUrl caption:caption resolver:resolve rejecter:reject];
-    
+
 }
 
 - (void) shareWithPhoto:(NSObject *)photoImageOrUrl videoUrl:(NSString *)videoUrl sticker:(NSObject *)stickerImageOrUrl stickerPosX:(float)stickerPosX stickerPosY:(float)stickerPosY attachmentUrl:(NSString *)attachmentUrl caption:(NSString *)caption resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject {
-    
+
     NSObject<SCSDKSnapContent> *snap;
-    
+
     if (videoUrl) {
-        NSURL *url = [NSURL URLWithString:videoUrl];
+        NSURL *url = [self urlForString:videoUrl];
         SCSDKSnapVideo *video = [[SCSDKSnapVideo alloc] initWithVideoUrl:url];
         snap = [[SCSDKVideoSnapContent alloc] initWithSnapVideo:video];
     }
     else if ([photoImageOrUrl isKindOfClass:[NSString class]]) {
-        NSURL *url = [NSURL URLWithString:(NSString *)photoImageOrUrl];
+        NSURL *url = [self urlForString:(NSString *)photoImageOrUrl];
         SCSDKSnapPhoto *photo = [[SCSDKSnapPhoto alloc] initWithImageUrl:url];
         snap = [[SCSDKPhotoSnapContent alloc] initWithSnapPhoto:photo];
     }
@@ -165,41 +165,55 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl
     }
 
     if (stickerImageOrUrl) {
-        SCSDKSnapSticker *snapSticker;
-        if ([stickerImageOrUrl isKindOfClass:[NSString class]]) {
-            NSURL *url = [NSURL URLWithString:(NSString *)stickerImageOrUrl];
-            snapSticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:url isAnimated:NO];
-        }
-        else if ([stickerImageOrUrl isKindOfClass:[UIImage class]]) {
-            snapSticker = [[SCSDKSnapSticker alloc] initWithStickerImage:(UIImage *)stickerImageOrUrl];
-        }
-        
-        if (stickerPosX) {
-            snapSticker.posX = stickerPosX;
-        }
-        if (stickerPosY) {
-             snapSticker.posY = stickerPosY;
-        }
-       
-        snap.sticker = snapSticker;
-    }
-    
-    snap.caption = caption;
-    snap.attachmentUrl = attachmentUrl;
-    NSLog(@"snap api : %@", snapAPI);
-    [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
-        if (error != nil) {
-            resolve(@{
-            @"result": @(YES),
-            @"error": error.localizedDescription
-                });
-        }
-        else {
-            resolve(@{ @"result": @(YES)});
-        }
-        /* Handle response */
-    }];
-    
-}
+         SCSDKSnapSticker *snapSticker;
+         if ([stickerImageOrUrl isKindOfClass:[NSString class]]) {
+             NSURL *url = [self urlForString:(NSString *)stickerImageOrUrl];
+             snapSticker = [[SCSDKSnapSticker alloc] initWithStickerUrl:url isAnimated:NO];
+         }
+         else if ([stickerImageOrUrl isKindOfClass:[UIImage class]]) {
+             snapSticker = [[SCSDKSnapSticker alloc] initWithStickerImage:(UIImage *)stickerImageOrUrl];
+         }
 
-@end
+         if (stickerPosX) {
+             snapSticker.posX = stickerPosX;
+         }
+         if (stickerPosY) {
+              snapSticker.posY = stickerPosY;
+         }
+
+         snap.sticker = snapSticker;
+     }
+
+     snap.caption = caption;
+     snap.attachmentUrl = attachmentUrl;
+     NSLog(@"snap api : %@", snapAPI);
+     [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
+         if (error != nil) {
+             resolve(@{
+             @"result": @(YES),
+             @"error": error.localizedDescription
+                 });
+         }
+         else {
+             resolve(@{ @"result": @(YES)});
+         }
+         /* Handle response */
+     }];
+ }
+
+ - (BOOL) isStringAPath:(NSString *)stringUrl {
+     NSString *fullpath = stringUrl.stringByExpandingTildeInPath;
+     return [fullpath hasPrefix:@"/"] || [fullpath hasPrefix:@"file:/"];
+ }
+
+ - (NSURL *) urlForString:(NSString *)stringUrl {
+     if ([self isStringAPath:stringUrl]) {
+         // NSLog(@"IS A FILE PATH");
+         return [NSURL fileURLWithPath:stringUrl];
+     } else {
+         // NSLog(@"IS NOT A FILE PATH");
+         return [NSURL URLWithString:stringUrl];
+     }
+ }
+
+ @end
