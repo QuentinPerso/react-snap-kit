@@ -55,7 +55,7 @@ export default class SnapchatKit {
 
 	const { result } = await RNSnapchatKit.sharePhotoResolved(
 		resolvedPhoto, resolvedPhoto == null ? photoImageSourceOrUrl : null, 
-		resolvedSticker, resolvedSticker == null ? resolvedSticker : null, 
+		resolvedSticker, resolvedSticker == null ? stickerImageSourceOrUrl : null, 
 		stickerPosX, stickerPosY, 
 		attachmentUrl, 
 		caption).catch(e => { reject(e) });
@@ -71,7 +71,7 @@ export default class SnapchatKit {
 
 	const { result } = await RNSnapchatKit.shareVideoAtUrl(
 		videoUrl, 
-		resolvedSticker, resolvedSticker == null ? resolvedSticker : null, 
+		resolvedSticker, resolvedSticker == null ? stickerImageSourceOrUrl : null, 
 		stickerPosX, stickerPosY, 
 		attachmentUrl, 
 		caption).catch(e => { reject(e) });
