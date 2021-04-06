@@ -12,7 +12,8 @@ declare module 'react-native-snapchat-kit' {
     static getUserInfo(): Promise<SnapchatUserData | null>;
     static isLogged(): Promise<boolean>;
     static logout(): Promise<boolean>;
-    static sharePhotoAtUrl(photoUrl: string, stickerUrl: string, stickerPosX: DoubleRange, stickerPosY: DoubleRange, attachmentUrl: string, caption: string): Promise<boolean>;
+    static sharePhotoAtUrl(photoUrl: string, stickerUrl?: string, stickerPosX?: DoubleRange, stickerPosY?: DoubleRange, attachmentUrl?: string, caption?: string): Promise<boolean>;
     static shareVideoAtUrl(videoUrl: string, stickerUrl: string, stickerPosX: DoubleRange, stickerPosY: DoubleRange, attachmentUrl: string, caption: string): Promise<boolean>;
+    static lensSnapContent(lensUUID: string, caption: string, attachmentUrl: string, launchData: string): Promise<boolean>;
   }
 }

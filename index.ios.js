@@ -47,7 +47,7 @@ export default class SnapchatKit {
     });
   }
 
-  static async sharePhoto(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+  static async sharePhotoAtUrl(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
 	const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 	const resolvedPhoto = resolveAssetSource(photoImageSourceOrUrl);
@@ -77,6 +77,20 @@ export default class SnapchatKit {
 		caption).catch(e => { reject(e) });
 
     return result;
+  }
+  static async lensSnapContent(lensUUID, caption, attachmentUrl, launchData) {
+    
+    return new Promise((resolve, reject) => {
+      RNSnapchatKit.lensSnapContent(lensUUID, caption, attachmentUrl, launchData)
+        .then((result) => {
+          if(result.error) {
+            reject(result.error);
+          } else { 
+            resolve(result)
+          }
+        })
+        .catch(e => reject(e)); 
+    });
   }
 
 }

@@ -20,7 +20,6 @@
 }
 
 
-
 RCT_EXPORT_MODULE()
 
 //******************************************************************
@@ -215,5 +214,44 @@ RCT_EXPORT_METHOD(shareVideoAtUrl:(NSString *)videoUrl
          return [NSURL URLWithString:stringUrl];
      }
  }
+
+ RCT_EXPORT_METHOD(lensSnapContent:(NSString *)lensUUID
+                  caption:(NSString *)caption
+                  attachmentUrl:(NSString *)attachmentUrl
+                  launchData:(NSString *)launchData
+                  resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+
+    NSLog(@"lens launchData ========> %@", launchData);
+     // objective-c
+     /* Modeling a Snap using SCSDKLensSnapContent */
+     SCSDKLensSnapContent *snap = [[SCSDKLensSnapContent alloc] initWithLensUUID:lensUUID];
+     snap.caption = caption; /* Optional */
+     snap.attachmentUrl = attachmentUrl; /* Optional */
+
+     /* Optionally can add launch data */
+     /* First initialize the launch data builder: */
+     SCSDKLensLaunchDataBuilder *launchDataBuilder = [[SCSDKLensLaunchDataBuilder alloc] init];
+
+     /* Then add the key value pair of the launch data: */
+      [launchDataBuilder addNSStringKeyPair:@"breadtag" value:launchData];
+
+     /* Then initialize and set the launch data to the Lens snap content type using the builder: */
+    // [SCSDKLensLaunchData initWithBuilder:launchDataBuilder];
+     snap.launchData = [[SCSDKLensLaunchData alloc] initWithBuilder:launchDataBuilder];
+     
+     NSLog(@"snap : %@", snap);
+     [snapAPI startSendingContent:snap completionHandler:^(NSError *error) {
+         if (error != nil) {
+             resolve(@{
+             @"result": @(YES),
+             @"error": error.localizedDescription
+                 });
+         }
+         else {
+             resolve(@{ @"result": @(YES)});
+         }
+         /* Handle response */
+     }];
+}
 
  @end
