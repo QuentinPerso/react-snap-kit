@@ -47,7 +47,7 @@ export default class SnapchatKit {
     });
   }
 
-  static async sharePhoto(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
+  static async sharePhotoAtUrl(photoImageSourceOrUrl, stickerImageSourceOrUrl, stickerPosX, stickerPosY, attachmentUrl, caption) {
 	const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 
 	const resolvedPhoto = resolveAssetSource(photoImageSourceOrUrl);
